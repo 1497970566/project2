@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Puzzle Win Test</title>
+  <link rel="stylesheet" href="styling/style.css" />
+</head>
+<body>
+  <h1>Puzzle leaderboard tesing page</h1>
+
+  <button onclick="triggerWin()">
+    Force Win
+  </button>
+
+  <script>
+    const moves = 42;
+    const totalTime = 88;
+
+    function triggerWin() {
+      alert("You won!");
+
+      fetch("php/submit_score.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `moves=${moves}&time=${totalTime}`,
+      })
+        .then((res) => res.text())
+        .then((data) => {
+          alert("Score has beem submitted!\n" + data);
+          window.location.href = "leaderboard.html";
+        })
+        .catch((err) => alert("Error: " + err));
+    }
+  </script>
+</body>
+</html>
