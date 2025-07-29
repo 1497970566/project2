@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Leaderboard - Fifteen Puzzle</title>
+  <link rel="stylesheet" href="https://codd.cs.gsu.edu/~wou1/wp/pw/test/styling/style.css">
+</head>
+<body>
+  <div class="game-header">
+    <h1>Leaderboard</h1>
+    <p>Top players with the best times</p>
+  </div>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Player</th>
+        <th>Best Time</th>
+        <th>Moves</th>
+      </tr>
+    </thead>
+    <tbody id="leaderboard-body"></tbody>
+  </table>
+
+  <script>
+  fetch("https://codd.cs.gsu.edu/~wou1/wp/pw/test/php/leaderboard.php")
+    .then((res) => res.json())
+    .then((data) => {
+      const tbody = document.getElementById("leaderboard-body");
+      data.forEach((row, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${row.username}</td>
+          <td>${row.best_time}s</td>
+          <td>${row.moves}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    });
+  </script>
+</body>
+</html>
