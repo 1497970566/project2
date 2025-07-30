@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Puzzle Win Test</title>
-  <link rel="stylesheet" href="https://codd.cs.gsu.edu/~wou1/wp/pw/test/styling/style.css" />
+  <link rel="stylesheet" href="https://codd.cs.gsu.edu/~wou1/wp/pw/02/styling/style.css" />
 </head>
 <body>
   <h1>Puzzle leaderboard tesing page</h1>
@@ -19,7 +19,7 @@
     function triggerWin() {
       alert("You won!");
 
-      fetch("https://codd.cs.gsu.edu/~wou1/wp/pw/test/php/submit_score.php", {
+      fetch("https://codd.cs.gsu.edu/~wou1/wp/pw/02/php/submit_score.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -29,7 +29,7 @@
         .then((res) => res.text())
         .then((data) => {
           alert("Score has beem submitted!\n" + data);
-          window.location.href = "https://codd.cs.gsu.edu/~wou1/wp/pw/test/leaderboard.html";
+          window.location.href = "https://codd.cs.gsu.edu/~wou1/wp/pw/02/leaderboard.html";
         })
         .catch((err) => alert("Error: " + err));
     }

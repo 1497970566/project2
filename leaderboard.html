@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Leaderboard - Fifteen Puzzle</title>
-  <link rel="stylesheet" href="https://codd.cs.gsu.edu/~wou1/wp/pw/test/styling/style.css">
+  <link rel="stylesheet" href="https://codd.cs.gsu.edu/~wou1/wp/pw/02/styling/style.css">
 </head>
 <body>
   <div class="game-header">
@@ -23,7 +23,7 @@
   </table>
 
   <script>
-  fetch("https://codd.cs.gsu.edu/~wou1/wp/pw/test/php/leaderboard.php")
+  fetch("https://codd.cs.gsu.edu/~wou1/wp/pw/02/php/leaderboard.php")
     .then((res) => res.json())
     .then((data) => {
       const tbody = document.getElementById("leaderboard-body");

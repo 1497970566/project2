@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Include database connection
 require_once 'database.php';
 
 $username = $_POST['username'];
@@ -18,9 +17,9 @@ if ($user && password_verify($password, $user['password_hash'])) {
     
     // Redirect based on role
     if ($user['role'] === 'admin') {
-        header("Location: https://codd.cs.gsu.edu/~wou1/wp/pw/test/admin_dashboard_v2.php");
+        header("Location: https://codd.cs.gsu.edu/~wou1/wp/pw/02/admin_dashboard_v2.php");
     } else {
-        header("Location: https://codd.cs.gsu.edu/~wou1/wp/pw/test/game.html");
+        header("Location: https://codd.cs.gsu.edu/~wou1/wp/pw/02/game.html");
     }
     exit();
 } else {

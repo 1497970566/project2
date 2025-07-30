@@ -3,7 +3,7 @@ session_start();
 
 
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header("Location: https://codd.cs.gsu.edu/~wou1/wp/pw/test/index.html");
+    header("Location: https://codd.cs.gsu.edu/~wou1/wp/pw/02/index.html");
     exit();
 }
 
@@ -210,7 +210,7 @@ $stats['avg_time'] = $avg_time ? gmdate('i:s', $avg_time) : '00:00';
     <nav class="top-nav">
         <div class="nav-container">
             <div class="nav-brand">
-                <h1>Fifteen Puzzle Admin <span class="admin-badge">ADMIN</span></h1>
+                <h1>Fifteen Puzzle <span class="admin-badge">ADMIN</span></h1>
             </div>
             
             <ul class="nav-menu">
@@ -241,7 +241,7 @@ $stats['avg_time'] = $avg_time ? gmdate('i:s', $avg_time) : '00:00';
                     <div class="user-name"><?php echo htmlspecialchars($_SESSION['username']); ?></div>
                     <div class="user-role">Administrator</div>
                 </div>
-                <a href="https://codd.cs.gsu.edu/~wou1/wp/pw/test/php/logout.php" class="logout-btn">Logout</a>
+                <a href="https://codd.cs.gsu.edu/~wou1/wp/pw/02/php/logout.php" class="logout-btn">Logout</a>
             </div>
         </div>
     </nav>
@@ -269,22 +269,7 @@ $stats['avg_time'] = $avg_time ? gmdate('i:s', $avg_time) : '00:00';
                 </div>
             </div>
 
-            <div class="content-card">
-                <h2>Recent Activity</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Player</th>
-                            <th>Action</th>
-                            <th>Details</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      <!--wait for adding-->
-                    </tbody>
-                </table>
-            </div>
+            
         </div>
 
         <!-- Users Section -->
@@ -368,7 +353,7 @@ $stats['avg_time'] = $avg_time ? gmdate('i:s', $avg_time) : '00:00';
                                     
                                     <div class="btn-group">
                                         <button type="submit" class="btn btn-primary">Update User</button>
-                                        <button type="button" class="btn-secondary" onclick="hideEditUser(<?php echo $user['id']; ?>)">Cancel</button>
+                                        <button type="button" class="btn btn-secondary" onclick="hideEditUser(<?php echo $user['id']; ?>)">Cancel</button>
                                     </div>
                                 </form>
                             </td>
