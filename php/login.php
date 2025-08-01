@@ -19,7 +19,7 @@ if ($user && password_verify($password, $user['password_hash'])) {
     if ($user['role'] === 'admin') {
         header("Location: https://codd.cs.gsu.edu/~wou1/wp/pw/02/admin_dashboard_v2.php");
     } else {
-        header("Location: https://codd.cs.gsu.edu/~wou1/wp/pw/02/game.html");
+        header("Location: https://codd.cs.gsu.edu/~jtran88/WP/PW/PW2/game.html");
     }
     exit();
 } else {

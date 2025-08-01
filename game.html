@@ -1,38 +1,71 @@
+<!-- 
+Extra Features Implemented (Undergrad):
+
+1. End-of-game notification:
+   - Displays "You Win!" message with links to Leaderboard and Play Again
+   - Includes fun emoji animation
+   - Overlays the page in light green
+
+2. Multiple backgrounds:
+   - Dropdown to select from 5 different backgrounds
+   - Random background is selected on page load/refresh
+   - Background can be changed during the game
+   - All backgrounds use full path URLs
+
+*Please grade these two faetures*
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Puzzle Win Test</title>
-  <link rel="stylesheet" href="https://codd.cs.gsu.edu/~wou1/wp/pw/02/styling/style.css" />
+  <title>Fifteen Puzzle Game</title>
+  <link rel="stylesheet" href="styling/game.css">
 </head>
 <body>
-  <h1>Puzzle leaderboard tesing page</h1>
+  <h1>Fifteen Puzzle</h1>
 
-  <button onclick="triggerWin()">
-    Force Win
-  </button>
+  <div class="controls">
+    <label for="backgroundSelect">Choose Background:</label>
+    <select id="backgroundSelect">
+      <option value="https://codd.cs.gsu.edu/~jtran88/WP/PW/PW2/image/cinnamoroll.jpg">Cinnamoroll</option>
+      <option value="https://codd.cs.gsu.edu/~jtran88/WP/PW/PW2/image/dog.jpg">Pompompurin</option>
+      <option value="https://codd.cs.gsu.edu/~jtran88/WP/PW/PW2/image/egg.jpg">Gudetama</option>
+      <option value="https://codd.cs.gsu.edu/~jtran88/WP/PW/PW2/image/hellokitty.jpg">Hello Kitty</option>
+      <option value="https://codd.cs.gsu.edu/~jtran88/WP/PW/PW2/image/twin.jpg">Little Twin Stars</option>
+    </select>
+    <form action="https://codd.cs.gsu.edu/~jtran88/WP/PW/PW2/leaderboard.html" style="display: inline;">
+      <button id="leaderboardBtn" type="submit">Leaderboard</button>
+    </form>
+    <button id="resetBtn" onclick="location.reload()">Reset</button>
+  </div>
 
-  <script>
-    const moves = 42;
-    const totalTime = 88;
+  <div class="board" id="board"></div>
+  <div id="shuffle-container">
+    <button id="shuffleBtn">Shuffle</button>
+  </div>
 
-    function triggerWin() {
-      alert("You won!");
+  <div id="win-banner">
+  🎉 You Win! 🎉
+  <a id="leaderboard-link" href="https://codd.cs.gsu.edu/~jtran88/WP/PW/PW2/leaderboard.html">→ View Leaderboard</a>
+  &nbsp;&nbsp;&nbsp;
+  <a id="play-again-link" href="">  ↻ Play Again</a>
+  </div>
+  <div id="confetti">🎊🎉✨🪄💫</div>
+  <div id="score-saved-msg">Score saved to leaderboard!</div>
+  <div id="win-overlay"></div>
 
-      fetch("https://codd.cs.gsu.edu/~wou1/wp/pw/02/php/submit_score.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: `moves=${moves}&time=${totalTime}`,
-      })
-        .then((res) => res.text())
-        .then((data) => {
-          alert("Score has beem submitted!\n" + data);
-          window.location.href = "https://codd.cs.gsu.edu/~wou1/wp/pw/02/leaderboard.html";
-        })
-        .catch((err) => alert("Error: " + err));
-    }
-  </script>
+  <p>Moves: <span id="moveCount">0</span> | Time: <span id="timer">0</span>s</p>
+
+  <div id="validators">
+    <a href="https://validator.w3.org/#validate_by_uri">
+        <img src="https://codd.cs.gsu.edu/~jtran88/WP/PW/PW2/image/w3c-xhtml.png" alt="Valid XHTML 1.1">
+    </a>
+    <a href="https://jigsaw.w3.org/css-validator/">
+        <img src="https://codd.cs.gsu.edu/~jtran88/WP/PW/PW2/image/w3c-css.png" alt="Valid CSS">
+    </a>
+  </div>
+
+  <script src="game.js"></script>
 </body>
 </html>
