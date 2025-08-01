@@ -62,7 +62,6 @@ function createTiles() {
   }
 
   updateBoard(); // Set initial tile positions visually
-  resetTimer();  // Start timer
 }
 
 // Visually positions the tiles on screen based on their data-x/y
@@ -133,7 +132,7 @@ function shuffle() {
   moveCount = 0;
   moveCounter.textContent = moveCount;
   winBanner.style.display = "none";
-  resetTimer();
+  resetTimer(); // Start timer
   updateBoard();
 }
 
