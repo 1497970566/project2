@@ -105,71 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 break;
                 
-            case 'edit_background':
-                $bg_id = (int)$_POST['bg_id'];
-                $new_name = trim($_POST['new_name']);
-                $new_status = (int)$_POST['new_status'];
-                
-                if (empty($new_name)) {
-                    $upload_error = "Background name cannot be empty.";
-                } else {
-                    $stmt = $conn->prepare("UPDATE background_images SET image_name = ?, is_active = ? WHERE image_id = ?");
-                    $stmt->bind_param("sii", $new_name, $new_status, $bg_id);
-                    if ($stmt->execute()) {
-                        $upload_success = "Background updated successfully!";
-                    } else {
-                        $upload_error = "Error updating background: " . $conn->error;
-                    }
-                }
-                break;
-                
-            case 'toggle_background':
-                $bg_id = (int)$_POST['bg_id'];
-                $stmt = $conn->prepare("UPDATE background_images SET is_active = NOT is_active WHERE image_id = ?");
-                $stmt->bind_param("i", $bg_id);
-                if ($stmt->execute()) {
-                    $upload_success = "Background status updated successfully!";
-                } else {
-                    $upload_error = "Error updating background status: " . $conn->error;
-                }
-                break;
-                
-            case 'delete_background':
-                $bg_id = (int)$_POST['bg_id'];
-                
 
-                $stmt = $conn->prepare("SELECT image_url FROM background_images WHERE image_id = ?");
-                $stmt->bind_param("i", $bg_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                if ($row = $result->fetch_assoc()) {
-                    $image_path = $row['image_url'];
-                    
-                    if (file_exists($image_path)) {
-                        if (unlink($image_path)) {
-                            $upload_success = "Background image deleted successfully!";
-                        } else {
-                            $upload_error = "Error deleting file from server.";
-                        }
-                    } else {
-                        $upload_error = "File not found on server: " . $image_path;
-                    }
-                }
-                
-                $stmt = $conn->prepare("DELETE FROM background_images WHERE image_id = ?");
-                $stmt->bind_param("i", $bg_id);
-                if ($stmt->execute()) {
-                    if (empty($upload_error)) {
-                        $upload_success = "Background image deleted successfully!";
-                    }
-                } else {
-                    $upload_error = "Error deleting from database: " . $conn->error;
-                }
-                
-                // Force redirect to refresh the page
-                header("Location: ?tab=backgrounds");
-                exit;
-                break;
         }
     }
 }
@@ -229,11 +165,7 @@ $stats['avg_time'] = $avg_time ? gmdate('i:s', $avg_time) : '00:00';
                         Games
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="?tab=backgrounds" class="nav-link <?php echo $activeTab === 'backgrounds' ? 'active' : ''; ?>">
-                        Backgrounds
-                    </a>
-                </li>
+
             </ul>
             
             <div class="nav-user">
@@ -407,83 +339,7 @@ $stats['avg_time'] = $avg_time ? gmdate('i:s', $avg_time) : '00:00';
             </div>
         </div>
 
-        <!-- Backgrounds Section -->
-        <div id="backgrounds" class="content-section <?php echo $activeTab === 'backgrounds' ? 'active' : ''; ?>">
-            <div class="content-card">
-                <h2>Background Management</h2>
 
-                <!-- Background Grid -->
-                <div class="background-grid">
-                    <?php
-                    $result = $conn->query("SELECT * FROM background_images ORDER BY created_at DESC");
-                    if ($result && $result->num_rows > 0):
-                        while ($bg = $result->fetch_assoc()):
-                    ?>
-                    <div class="bg-card">
-                        <div class="bg-preview">
-                            <?php if (!empty($bg['image_url'])): ?>
-                                <img src="<?php echo htmlspecialchars($bg['image_url']); ?>" alt="<?php echo htmlspecialchars($bg['image_name']); ?>">
-                            <?php else: ?>
-                                <div class="no-image">No Image</div>
-                            <?php endif; ?>
-                            <div class="bg-id">
-                                ID: <?php echo $bg['image_id']; ?>
-                            </div>
-                        </div>
-                        <h4 class="bg-name"><?php echo htmlspecialchars($bg['image_name']); ?></h4>
-                        <p class="bg-url"><?php echo htmlspecialchars($bg['image_url']); ?></p>
-                        <div class="bg-actions">
-                            <button class="btn btn-primary" onclick="showEditBackground(<?php echo $bg['image_id']; ?>)">Edit</button>
-                            <form method="POST" style="display: inline;" action="?tab=backgrounds">
-                                <input type="hidden" name="action" value="toggle_background">
-                                <input type="hidden" name="bg_id" value="<?php echo $bg['image_id']; ?>">
-                                <button type="submit" class="btn <?php echo $bg['is_active'] ? 'btn-warning' : 'btn-success'; ?>">
-                                    <?php echo $bg['is_active'] ? 'Deactivate' : 'Activate'; ?>
-                                </button>
-                            </form>
-                            <form method="POST" style="display: inline;" action="?tab=backgrounds">
-                                <input type="hidden" name="action" value="delete_background">
-                                <input type="hidden" name="bg_id" value="<?php echo $bg['image_id']; ?>">
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this background?')">Delete</button>
-                            </form>
-                        </div>
-                        
-                        <!-- Edit Background Form (Hidden by default) -->
-                        <div id="edit-bg-<?php echo $bg['image_id']; ?>" class="edit-bg-form" style="display: none;">
-                            <form method="POST" action="?tab=backgrounds">
-                                <input type="hidden" name="action" value="edit_background">
-                                <input type="hidden" name="bg_id" value="<?php echo $bg['image_id']; ?>">
-                                <div class="form-group">
-                                    <label for="new_name_<?php echo $bg['image_id']; ?>">Background Name:</label>
-                                    <input type="text" id="new_name_<?php echo $bg['image_id']; ?>" name="new_name" value="<?php echo htmlspecialchars($bg['image_name']); ?>" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="new_status_<?php echo $bg['image_id']; ?>">Status:</label>
-                                    <select id="new_status_<?php echo $bg['image_id']; ?>" name="new_status">
-                                        <option value="1" <?php echo $bg['is_active'] ? 'selected' : ''; ?>>Active</option>
-                                        <option value="0" <?php echo !$bg['is_active'] ? 'selected' : ''; ?>>Inactive</option>
-                                    </select>
-                                </div>
-                                <div class="btn-group">
-                                    <button type="submit" class="btn btn-success">Save Changes</button>
-                                    <button type="button" class="btn btn-secondary" onclick="hideEditBackground(<?php echo $bg['image_id']; ?>)">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <?php 
-                        endwhile;
-                    else:
-                    ?>
-                    <div class="empty-state">
-                        <div class="empty-state-icon">Image</div>
-                        <h3>No Backgrounds Found</h3>
-                        <p>Upload your first background image to get started!</p>
-                    </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -530,19 +386,7 @@ $stats['avg_time'] = $avg_time ? gmdate('i:s', $avg_time) : '00:00';
             }
         }
 
-        function showEditBackground(bgId) {
-            const editForm = document.getElementById('edit-bg-' + bgId);
-            if (editForm) {
-                editForm.style.display = 'block';
-            }
-        }
 
-        function hideEditBackground(bgId) {
-            const editForm = document.getElementById('edit-bg-' + bgId);
-            if (editForm) {
-                editForm.style.display = 'none';
-            }
-        }
 
     </script>
 </body>
